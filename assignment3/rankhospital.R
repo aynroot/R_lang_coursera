@@ -20,11 +20,17 @@ rankhospital <- function(state, outcome, num="best") {
     data$target.column <- as.numeric(data_col)
     state_data <- data[data$State == state,]
 
-    ordered_results <- state_data[order(state_data$target.column, state_data$Hospital.Name), ]$Hospital.Name
-    if (num == "best")
+    if (num == "best") {
+        ordered_results <- state_data[order(state_data$target.column, state_data$Hospital.Name), ]$Hospital.Name
         ordered_results[[1]]
-    else if (num == "worst")
-        ordered_results[[length(ordered_results)]]
-    else
-        ordered_results[[num]]
+    } else if (num == "worst") {
+        ordered_results <- state_data[order(- state_data$target.column, state_data$Hospital.Name), ]$Hospital.Name
+        ordered_results[[1]]
+    } else {
+        ordered_results <- state_data[order(state_data$target.column, state_data$Hospital.Name), ]$Hospital.Name
+        if ( num <= length(ordered_results))
+            ordered_results[[num]]
+        else
+            NA
+    }
 }
